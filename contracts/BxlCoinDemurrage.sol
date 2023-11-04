@@ -41,13 +41,13 @@ contract BrusselsCoin is ERC20, ERC20Burnable, Ownable, AccessControl {
         emit Minted(to, amount, description);
     }
 
-    function _getDemurrage(address account) internal view returns (uint256 demurrage) {
+    function getDemurrage(address account) public view returns (uint256 demurrage) {
         uint256 accountBalance = balanceOf(account);
         demurrage = accountBalance - exponentialDecay(accountBalance, block.timestamp - lastActivity[account]);
     }
 
     function tax(address account) external onlyOwner {
-        uint256 demurrage = _getDemurrage(account);
+        uint256 demurrage = getDemurrage(account);
         _transfer(account, owner(), demurrage);
     }
 
@@ -58,7 +58,7 @@ contract BrusselsCoin is ERC20, ERC20Burnable, Ownable, AccessControl {
 
     function transfer(address to, uint256 value) public override returns (bool) {
         address from = _msgSender();
-        uint256 demurrage = _getDemurrage(from);
+        uint256 demurrage = getDemurrage(from);
         lastActivity[from] = block.timestamp;
         _transfer(from, owner(), demurrage);
         require(balanceOf(from) >= value, "Not enough balance, check for demurrage");
@@ -69,7 +69,7 @@ contract BrusselsCoin is ERC20, ERC20Burnable, Ownable, AccessControl {
     function transferFrom(address from, address to, uint256 value) public override returns (bool) {
         address spender = _msgSender();
         _spendAllowance(from, spender, value);
-        uint256 demurrage = _getDemurrage(from);
+        uint256 demurrage = getDemurrage(from);
         lastActivity[from] = block.timestamp;
         _transfer(from, owner(), demurrage);
         require(balanceOf(spender) >= value, "Not enough balance, check for demurrage");
