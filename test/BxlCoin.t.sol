@@ -84,8 +84,8 @@ contract BxlCoinDemurrage_Test is Test {
         emit log_named_uint("Balance user1 after tax", user1Balance);
         emit log_named_uint("Balance treasury after tax", treasuryBalance);
 
-        assert(user1Balance < user1InitBalance);
-        assert(treasuryBalance > treasuryInitBalance);
+        assertLt(user1Balance, user1InitBalance);
+        assertGt(treasuryBalance, treasuryInitBalance);
     }
 
     function test_Success_Tax_90days() public {
@@ -104,8 +104,8 @@ contract BxlCoinDemurrage_Test is Test {
         emit log_named_uint("Balance user1 after tax", user1Balance);
         emit log_named_uint("Balance treasury after tax", treasuryBalance);
 
-        assert(user1Balance < user1InitBalance);
-        assert(treasuryBalance > treasuryInitBalance);
+        assertLt(user1Balance, user1InitBalance);
+        assertGt(treasuryBalance, treasuryInitBalance);
     }
 
     function test_Success_Tax_180days() public {
@@ -124,8 +124,8 @@ contract BxlCoinDemurrage_Test is Test {
         emit log_named_uint("Balance user1 after tax", user1Balance);
         emit log_named_uint("Balance treasury after tax", treasuryBalance);
 
-        assert(user1Balance < user1InitBalance);
-        assert(treasuryBalance > treasuryInitBalance);
+        assertLt(user1Balance, user1InitBalance);
+        assertGt(treasuryBalance, treasuryInitBalance);
     }
 
     function test_Success_Tax_365days() public {
@@ -144,8 +144,8 @@ contract BxlCoinDemurrage_Test is Test {
         emit log_named_uint("Balance user1 after tax", user1Balance);
         emit log_named_uint("Balance treasury after tax", treasuryBalance);
 
-        assert(user1Balance < user1InitBalance);
-        assert(treasuryBalance > treasuryInitBalance);
+        assertLt(user1Balance, user1InitBalance);
+        assertGt(treasuryBalance, treasuryInitBalance);
     }
 
     function test_Success_Tax_730days() public {
@@ -164,13 +164,11 @@ contract BxlCoinDemurrage_Test is Test {
         emit log_named_uint("Balance user1 after tax", user1Balance);
         emit log_named_uint("Balance treasury after tax", treasuryBalance);
 
-        assert(user1Balance < user1InitBalance);
-        assert(treasuryBalance > treasuryInitBalance);
+        assert(user1Balance < user1InitBalance && user1Balance ==0);
+        assertGt(treasuryBalance, treasuryInitBalance);
     }
 
     function testFuzz_Success_transfer(uint256 amount) public {
-        uint256 user1InitBalance = brusselsCoin.balanceOf(users.user1);
-
         vm.warp(block.timestamp + 100 days);
 
         amount = bound(amount, 1,  initUserBalances - brusselsCoin.getDemurrage((users.user1)));
@@ -179,7 +177,22 @@ contract BxlCoinDemurrage_Test is Test {
         brusselsCoin.transfer(users.user2, amount);
 
         // The balance of user1 should have decreased more than transfered amount
-        assert(brusselsCoin.balanceOf(users.user1) < user1InitBalance - amount);
-        assert(brusselsCoin.balanceOf(users.creatorAddress) > 0);
+        assertLt(brusselsCoin.balanceOf(users.user1), initUserBalances - amount);
+        assertGt(brusselsCoin.balanceOf(users.creatorAddress), 0);
+    }
+
+    function testFuzz_Success_transferFrom(uint256 amount) public {
+        vm.warp(block.timestamp + 100 days);
+
+        amount = bound(amount, 1,  initUserBalances - brusselsCoin.getDemurrage((users.user1)));
+
+        vm.prank(users.user1);
+        brusselsCoin.approve(users.user2, amount);
+        vm.prank(users.user2);
+        brusselsCoin.transferFrom(users.user1, users.user2, amount);
+
+        assertLt(brusselsCoin.balanceOf(users.user1), initUserBalances - amount);
+        assertGt(brusselsCoin.balanceOf(users.creatorAddress), 0);
+        assertEq(brusselsCoin.balanceOf(users.user2), initUserBalances + amount);
     }
 }

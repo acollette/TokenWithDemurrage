@@ -810,8 +810,8 @@
       }
     },
     "test/BxlCoin.t.sol": {
-      "lastModificationDate": 1699112875450,
-      "contentHash": "bb454fed47d94d3c166c5247a82c2ad8",
+      "lastModificationDate": 1699132283575,
+      "contentHash": "00b380724a92f34c07c5ada8ca9afd67",
       "sourceName": "test/BxlCoin.t.sol",
       "solcConfig": {
         "settings": {
