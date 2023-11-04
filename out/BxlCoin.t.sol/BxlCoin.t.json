@@ -1,0 +1,20 @@
+{
+  "abi": [],
+  "bytecode": {
+    "object": "0x",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x",
+    "linkReferences": {}
+  },
+  "ast": {
+    "absolutePath": "test/BxlCoin.t.sol",
+    "id": 80,
+    "exportedSymbols": {},
+    "nodeType": "SourceUnit",
+    "src": "0:0:1",
+    "nodes": []
+  },
+  "id": 1
+}
