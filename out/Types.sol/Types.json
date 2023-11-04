@@ -1,0 +1,219 @@
+{
+  "abi": [],
+  "bytecode": {
+    "object": "0x",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x",
+    "linkReferences": {}
+  },
+  "ast": {
+    "absolutePath": "test/Utils/Types.sol",
+    "id": 23560,
+    "exportedSymbols": {
+      "Users": [
+        23559
+      ]
+    },
+    "nodeType": "SourceUnit",
+    "src": "32:216:19",
+    "nodes": [
+      {
+        "id": 23546,
+        "nodeType": "PragmaDirective",
+        "src": "32:24:19",
+        "nodes": [],
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".20"
+        ]
+      },
+      {
+        "id": 23559,
+        "nodeType": "StructDefinition",
+        "src": "58:190:19",
+        "nodes": [],
+        "canonicalName": "Users",
+        "members": [
+          {
+            "constant": false,
+            "id": 23548,
+            "mutability": "mutable",
+            "name": "creatorAddress",
+            "nameLocation": "93:14:19",
+            "nodeType": "VariableDeclaration",
+            "scope": 23559,
+            "src": "77:30:19",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address_payable",
+              "typeString": "address payable"
+            },
+            "typeName": {
+              "id": 23547,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "77:15:19",
+              "stateMutability": "payable",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address_payable",
+                "typeString": "address payable"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 23550,
+            "mutability": "mutable",
+            "name": "admin1",
+            "nameLocation": "129:6:19",
+            "nodeType": "VariableDeclaration",
+            "scope": 23559,
+            "src": "113:22:19",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address_payable",
+              "typeString": "address payable"
+            },
+            "typeName": {
+              "id": 23549,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "113:15:19",
+              "stateMutability": "payable",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address_payable",
+                "typeString": "address payable"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 23552,
+            "mutability": "mutable",
+            "name": "admin2",
+            "nameLocation": "157:6:19",
+            "nodeType": "VariableDeclaration",
+            "scope": 23559,
+            "src": "141:22:19",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address_payable",
+              "typeString": "address payable"
+            },
+            "typeName": {
+              "id": 23551,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "141:15:19",
+              "stateMutability": "payable",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address_payable",
+                "typeString": "address payable"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 23554,
+            "mutability": "mutable",
+            "name": "admin3",
+            "nameLocation": "185:6:19",
+            "nodeType": "VariableDeclaration",
+            "scope": 23559,
+            "src": "169:22:19",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address_payable",
+              "typeString": "address payable"
+            },
+            "typeName": {
+              "id": 23553,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "169:15:19",
+              "stateMutability": "payable",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address_payable",
+                "typeString": "address payable"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 23556,
+            "mutability": "mutable",
+            "name": "user1",
+            "nameLocation": "213:5:19",
+            "nodeType": "VariableDeclaration",
+            "scope": 23559,
+            "src": "197:21:19",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address_payable",
+              "typeString": "address payable"
+            },
+            "typeName": {
+              "id": 23555,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "197:15:19",
+              "stateMutability": "payable",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address_payable",
+                "typeString": "address payable"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 23558,
+            "mutability": "mutable",
+            "name": "user2",
+            "nameLocation": "240:5:19",
+            "nodeType": "VariableDeclaration",
+            "scope": 23559,
+            "src": "224:21:19",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address_payable",
+              "typeString": "address payable"
+            },
+            "typeName": {
+              "id": 23557,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "224:15:19",
+              "stateMutability": "payable",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address_payable",
+                "typeString": "address payable"
+              }
+            },
+            "visibility": "internal"
+          }
+        ],
+        "name": "Users",
+        "nameLocation": "65:5:19",
+        "scope": 23560,
+        "visibility": "public"
+      }
+    ],
+    "license": "MIT"
+  },
+  "id": 19
+}

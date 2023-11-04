@@ -36,6 +36,7 @@ contract BrusselsCoin is ERC20, ERC20Burnable, Ownable, AccessControl {
             hasRole(MINTER_ROLE, msg.sender),
             "Must have minter role to mint"
         );
+        lastActivity[to] = block.timestamp;
         _mint(to, amount);
         emit Minted(to, amount, description);
     }
