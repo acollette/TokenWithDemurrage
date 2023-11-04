@@ -34,7 +34,7 @@ contract BrusselsCoin is ERC20, ERC20Burnable, Ownable, AccessControl {
     /*//////////////////////////////////////////////////////////////////////////
                                   CONSTRUCTOR
     //////////////////////////////////////////////////////////////////////////*/
-    
+
     constructor(address[] memory admins) Ownable(msg.sender) ERC20("Brussels Coin", "BXL") {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         for (uint256 i = 0; i < admins.length; i++) {
@@ -135,32 +135,5 @@ contract BrusselsCoin is ERC20, ERC20Burnable, Ownable, AccessControl {
         z = x * y;
         require(y == 0 || z / y == x);
         z = z / RAY;
-    }
-    
-    function rpow(uint256 x, uint256 n, uint256 b) internal pure returns (uint256 z) {
-        assembly {
-            switch n case 0 { z := b }
-            default {
-                switch x case 0 { z := 0 }
-                default {
-                    switch mod(n, 2) case 0 { z := b } default { z := x }
-                    let half := div(b, 2)  // for rounding.
-                    for { n := div(n, 2) } n { n := div(n,2) } {
-                        let xx := mul(x, x)
-                        if shr(128, x) { revert(0,0) }
-                        let xxRound := add(xx, half)
-                        if lt(xxRound, xx) { revert(0,0) }
-                        x := div(xxRound, b)
-                        if mod(n,2) {
-                            let zx := mul(z, x)
-                            if and(iszero(iszero(x)), iszero(eq(div(zx, x), z))) { revert(0,0) }
-                            let zxRound := add(zx, half)
-                            if lt(zxRound, zx) { revert(0,0) }
-                            z := div(zxRound, b)
-                        }
-                    }
-                }
-            }
-        }
     }
 }

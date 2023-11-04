@@ -13,8 +13,8 @@
   },
   "files": {
     "contracts/BxlCoinDemurrage.sol": {
-      "lastModificationDate": 1699121115941,
-      "contentHash": "f3aa18f7b91b9be35d4e08e5cc892e66",
+      "lastModificationDate": 1699124952089,
+      "contentHash": "abfed249b0a91b18748c980472b9674f",
       "sourceName": "contracts/BxlCoinDemurrage.sol",
       "solcConfig": {
         "settings": {
