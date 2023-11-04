@@ -98,10 +98,6 @@ contract BrusselsCoin is ERC20, ERC20Burnable, Ownable, AccessControl {
         return true;
     }
 
-    function setDecreaseFactor(uint256 _decreaseFactor) external onlyOwner {
-        decreaseFactor = _decreaseFactor; 
-    }
-
     function setTau(uint256 tau_) external onlyOwner {
         require(tau_ >= 30 days);
         tau = tau_;
