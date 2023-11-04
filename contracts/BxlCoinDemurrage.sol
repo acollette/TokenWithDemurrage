@@ -10,7 +10,11 @@ contract BrusselsCoin is ERC20, ERC20Burnable, Ownable, AccessControl {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
     uint256 constant RAY = 10 ** 27;
-    uint256 public decayPerSecond = RAY * 99999998 / 100000000;
+
+    // Decrease factor per second.
+    uint256 public decreaseFactor = RAY * 99999998 / 100000000;
+    // Seconds after which the remaining balance will be 0.
+    uint256 tau = 730 days;
 
     mapping(address => uint256) public lastActivity;
 
@@ -43,7 +47,7 @@ contract BrusselsCoin is ERC20, ERC20Burnable, Ownable, AccessControl {
 
     function getDemurrage(address account) public view returns (uint256 demurrage) {
         uint256 accountBalance = balanceOf(account);
-        demurrage = accountBalance - exponentialDecay(accountBalance, block.timestamp - lastActivity[account]);
+        demurrage = accountBalance - linearDecrease(accountBalance, block.timestamp - lastActivity[account]);
     }
 
     function tax(address account) external onlyOwner {
@@ -53,7 +57,7 @@ contract BrusselsCoin is ERC20, ERC20Burnable, Ownable, AccessControl {
 
     function balanceAfterDemurrage(address account) public view returns (uint256 balance) {
         uint256 accountBalance = balanceOf(account);
-        balance = exponentialDecay(accountBalance, block.timestamp - lastActivity[account]); 
+        balance = linearDecrease(accountBalance, block.timestamp - lastActivity[account]); 
     }
 
     function transfer(address to, uint256 value) public override returns (bool) {
@@ -77,22 +81,35 @@ contract BrusselsCoin is ERC20, ERC20Burnable, Ownable, AccessControl {
         return true;
     }
 
-    function setDecayPerSecond(uint256 _decayPerSecond) external onlyOwner {
-        decayPerSecond = _decayPerSecond; 
+    function setDecreaseFactor(uint256 _decreaseFactor) external onlyOwner {
+        decreaseFactor = _decreaseFactor; 
     }
 
-    // ----------
-    //    Math
-    // ----------
+    function setTau(uint256 tau_) external onlyOwner {
+        require(tau_ >= 30 days);
+        tau = tau_;
+    }
+
+    /*//////////////////////////////////////////////////////////////////////////
+                                      MATH
+    //////////////////////////////////////////////////////////////////////////*/
 
     // Functions were ported from:
     // https://github.com/makerdao/dss/blob/master/src/abaci.sol
 
-    /// @dev Returns the amount remaining after a decay.
+    /// @dev Returns the amount remaining after a demurrage.
     /// @param top The amount decaying.
     /// @param dur The seconds of decay.
-    function exponentialDecay(uint256 top, uint256 dur) public view returns (uint256) {
-        return rmul(top, rpow(decayPerSecond, dur, RAY));
+    function linearDecrease(uint256 top, uint256 dur) public view returns (uint256) {
+        if (dur >= tau) return 0;
+        return rmul(top, mul(tau - dur, RAY) / tau);
+    }
+
+    function add(uint256 x, uint256 y) internal pure returns (uint256 z) {
+        require((z = x + y) >= x);
+    }
+    function mul(uint256 x, uint256 y) internal pure returns (uint256 z) {
+        require(y == 0 || (z = x * y) / y == x);
     }
 
      function rmul(uint256 x, uint256 y) internal pure returns (uint256 z) {
