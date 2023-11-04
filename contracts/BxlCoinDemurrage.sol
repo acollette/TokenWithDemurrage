@@ -7,25 +7,44 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
 contract BrusselsCoin is ERC20, ERC20Burnable, Ownable, AccessControl {
-    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+    /*//////////////////////////////////////////////////////////////////////////
+                                      CONSTANTS
+    //////////////////////////////////////////////////////////////////////////*/
 
+    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     uint256 constant RAY = 10 ** 27;
+
+    /*//////////////////////////////////////////////////////////////////////////
+                                      VARIABLES
+    //////////////////////////////////////////////////////////////////////////*/
 
     // Decrease factor per second.
     uint256 public decreaseFactor = RAY * 99999998 / 100000000;
     // Seconds after which the remaining balance will be 0.
-    uint256 tau = 730 days;
+    uint256 public tau = 730 days;
 
     mapping(address => uint256) public lastActivity;
 
+    /*//////////////////////////////////////////////////////////////////////////
+                                     EVENTS
+    //////////////////////////////////////////////////////////////////////////*/
+
     event Minted(address indexed to, uint256 amount, string description);
 
+    /*//////////////////////////////////////////////////////////////////////////
+                                  CONSTRUCTOR
+    //////////////////////////////////////////////////////////////////////////*/
+    
     constructor(address[] memory admins) Ownable(msg.sender) ERC20("Brussels Coin", "BXL") {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         for (uint256 i = 0; i < admins.length; i++) {
             _grantRole(MINTER_ROLE, admins[i]);
         }
     }
+
+    /*//////////////////////////////////////////////////////////////////////////
+                                  FUNCTIONS
+    //////////////////////////////////////////////////////////////////////////*/
 
     function decimals() public view virtual override returns (uint8) {
         return 6;
