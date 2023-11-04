@@ -10,7 +10,7 @@ contract BrusselsCoin is ERC20, ERC20Burnable, Ownable, AccessControl {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
     uint256 constant RAY = 10 ** 27;
-    uint256 public exponentialDecayPerSecond = RAY * 99999998 / 100000000;
+    uint256 public decayPerSecond = RAY * 99999998 / 100000000;
 
     mapping(address => uint256) public lastActivity;
 
@@ -40,14 +40,25 @@ contract BrusselsCoin is ERC20, ERC20Burnable, Ownable, AccessControl {
         emit Minted(to, amount, description);
     }
 
-    function _processDemurrage(address account) internal view returns (uint256 demurrage) {
+    function _getDemurrage(address account) internal view returns (uint256 demurrage) {
         uint256 accountBalance = balanceOf(account);
-        demurrage = accountBalance - decay(accountBalance, block.timestamp - lastActivity[account]);
+        demurrage = accountBalance - exponentialDecay(accountBalance, block.timestamp - lastActivity[account]);
+    }
+
+    function tax(address account) external onlyOwner {
+        uint256 demurrage = _getDemurrage(account);
+        _transfer(account, owner(), demurrage);
+    }
+
+    function balanceAfterDemurrage(address account) public view returns (uint256 balance) {
+        uint256 accountBalance = balanceOf(account);
+        balance = exponentialDecay(accountBalance, block.timestamp - lastActivity[account]); 
     }
 
     function transfer(address to, uint256 value) public override returns (bool) {
         address from = _msgSender();
-        uint256 demurrage = _processDemurrage(from);
+        uint256 demurrage = _getDemurrage(from);
+        lastActivity[from] = block.timestamp;
         _transfer(from, owner(), demurrage);
         require(balanceOf(from) >= value, "Not enough balance, check for demurrage");
         _transfer(from, to, value);
@@ -57,11 +68,16 @@ contract BrusselsCoin is ERC20, ERC20Burnable, Ownable, AccessControl {
     function transferFrom(address from, address to, uint256 value) public override returns (bool) {
         address spender = _msgSender();
         _spendAllowance(from, spender, value);
-        uint256 demurrage = _processDemurrage(from);
+        uint256 demurrage = _getDemurrage(from);
+        lastActivity[from] = block.timestamp;
         _transfer(from, owner(), demurrage);
         require(balanceOf(spender) >= value, "Not enough balance, check for demurrage");
         _transfer(from, to, value);
         return true;
+    }
+
+    function setDecayPerSecond(uint256 _decayPerSecond) external onlyOwner {
+        decayPerSecond = _decayPerSecond; 
     }
 
     // ----------
@@ -74,8 +90,8 @@ contract BrusselsCoin is ERC20, ERC20Burnable, Ownable, AccessControl {
     /// @dev Returns the amount remaining after a decay.
     /// @param top The amount decaying.
     /// @param dur The seconds of decay.
-    function decay(uint256 top, uint256 dur) public view returns (uint256) {
-        return rmul(top, rpow(exponentialDecayPerSecond, dur, 10 ** decimals()));
+    function exponentialDecay(uint256 top, uint256 dur) public view returns (uint256) {
+        return rmul(top, rpow(decayPerSecond, dur, RAY));
     }
 
      function rmul(uint256 x, uint256 y) internal pure returns (uint256 z) {
