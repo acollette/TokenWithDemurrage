@@ -18,8 +18,6 @@ contract BrusselsCoin is ERC20, ERC20Burnable, Ownable, AccessControl {
                                       VARIABLES
     //////////////////////////////////////////////////////////////////////////*/
 
-    // Decrease factor per second.
-    uint256 public decreaseFactor = RAY * 99999998 / 100000000;
     // Seconds after which the remaining balance will be 0.
     uint256 public tau = 730 days;
 
